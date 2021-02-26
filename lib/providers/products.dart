@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_complete_guide/models/product.dart';
+import 'package:flutter/material.dart';
+import '../providers/product.dart';
 
 class Products with ChangeNotifier {
   final List<Product> _products = [
@@ -39,6 +39,10 @@ class Products with ChangeNotifier {
 
   List<Product> get products {
     return [..._products];
+  }
+
+  Product findById(String id) {
+    return _products.firstWhere((element) => element.id == id);
   }
 
   void addProduct(Product product) {
