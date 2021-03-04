@@ -5,7 +5,7 @@ import '../providers/products.dart';
 import '../widgets/product_item.dart';
 
 class ProductsGrid extends StatelessWidget {
-  bool _showAll;
+  final bool _showAll;
 
   ProductsGrid(this._showAll);
 

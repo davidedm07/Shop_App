@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_complete_guide/model/cart_item.dart';
-import 'package:flutter_complete_guide/providers/product.dart';
-
 import 'package:uuid/uuid.dart';
 import 'package:flutter/foundation.dart';
+
+import '../model/cart_item.dart';
+import '../providers/product.dart';
 
 class Cart with ChangeNotifier {
   Map<String, CartItem> _cartItemByProductId = {};
@@ -21,10 +20,17 @@ class Cart with ChangeNotifier {
             quantity: 0,
             price: product.price));
 
-    _cartItemByProductId[product.id].quantity =
-        _cartItemByProductId[product.id].quantity + 1;
-
+    _cartItemByProductId[product.id].quantity++;
     notifyListeners();
+  }
+
+  double get totalAmount {
+    var total = 0.0;
+    _cartItemByProductId.forEach((key, item) {
+      total += item.price * item.quantity;
+    });
+
+    return total;
   }
 
   int get itemsCount {
