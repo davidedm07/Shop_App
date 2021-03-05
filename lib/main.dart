@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/screens/cart_screen.dart';
 import 'package:provider/provider.dart';
@@ -6,8 +8,21 @@ import './screens/product_detail_screen.dart';
 import './screens/products_overview_screen.dart';
 import './providers/cart.dart';
 import './providers/products.dart';
+import './providers/orders.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  HttpOverrides.global = new MyHttpOverrides();
+  runApp(MyApp());
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -19,6 +34,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => Cart(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => Orders(),
         )
       ],
       child: MaterialApp(
