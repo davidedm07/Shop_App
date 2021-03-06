@@ -33,11 +33,21 @@ class Cart with ChangeNotifier {
     return total;
   }
 
+  void removeItem(String productId) {
+    _cartItemByProductId.remove(productId);
+    notifyListeners();
+  }
+
   int get itemsCount {
     return _cartItemByProductId.isEmpty
         ? 0
         : _cartItemByProductId.values
             .map((cartItem) => cartItem.quantity)
             .reduce((a, b) => a + b);
+  }
+
+  void clear() {
+    _cartItemByProductId = {};
+    notifyListeners();
   }
 }
