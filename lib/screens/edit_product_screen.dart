@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/providers/product.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const route = 'edit-product-screen';
@@ -18,7 +19,27 @@ class _EditProductScreenState extends State<EditProductScreen> {
     imageUrl: '',
   );
 
+  String _validateText(String text) {
+    if (text.isEmpty) {
+      return 'Please provide a value!';
+    }
+    return null;
+  }
+
+  String _validateNumber(String value) {
+    var parsedValue = double.parse(value);
+    if (parsedValue == null) {
+      return 'Please provide a number';
+    } else if (parsedValue <= 0) {
+      return 'Please provide a valid price!';
+    }
+    return null;
+  }
+
   void _saveForm() {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
     _formKey.currentState.save();
   }
 
@@ -41,6 +62,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Title'),
                   textInputAction: TextInputAction.next,
+                  validator: _validateText,
                   onSaved: (value) {
                     return Product(
                       id: null,
@@ -55,6 +77,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   decoration: InputDecoration(labelText: 'Price'),
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
+                  validator: _validateNumber,
                   onSaved: (value) {
                     return Product(
                       id: null,
@@ -69,6 +92,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   decoration: InputDecoration(labelText: 'Description'),
                   maxLines: 3,
                   keyboardType: TextInputType.multiline,
+                  validator: _validateText,
                   onSaved: (value) {
                     return Product(
                       id: null,
@@ -83,6 +107,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   decoration: InputDecoration(labelText: 'Image Url'),
                   keyboardType: TextInputType.url,
                   onFieldSubmitted: (_) => _saveForm(),
+                  validator: PatternValidator(
+                    r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?",
+                    errorText: 'Please provide a value Url',
+                  ),
                   onSaved: (value) {
                     return Product(
                       id: null,
