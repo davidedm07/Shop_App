@@ -25,7 +25,7 @@ class Products with ChangeNotifier {
       description: 'Warm and cozy - exactly what you need for the winter.',
       price: 19.99,
       imageUrl:
-          'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
+          'https://m.media-amazon.com/images/I/61HZI7AqOqL._AC_UY218_.jpg',
     ),
     Product(
       id: 'p4',
@@ -51,6 +51,12 @@ class Products with ChangeNotifier {
 
   void addProduct(Product product) {
     _products.add(product);
+    notifyListeners();
+  }
+
+  void updateProduct(Product product) {
+    final index = _products.indexWhere((prod) => prod.id == product.id);
+    _products[index] = product;
     notifyListeners();
   }
 }
